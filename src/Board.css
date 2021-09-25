@@ -1,0 +1,9 @@
+.Board table {
+  margin: 0 auto;
+  border: 1px solid black;
+}
+
+.Board-title {
+  font-size: 80px;
+  margin: 20px;
+}
