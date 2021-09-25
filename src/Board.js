@@ -44,7 +44,7 @@ function Board({ nrows=3, ncols=5, chanceLightStartsOn=0.25 }) {
   function hasWon() {
     // check the board in state to determine whether the player has won.
 
-    return board.filter(row => row.filter(cell => cell===true).length === 0).length === nrows;
+    return board.every(row => row.every(cell => cell===false));
   }
 
   function flipCellsAround(coord) {
@@ -59,18 +59,17 @@ function Board({ nrows=3, ncols=5, chanceLightStartsOn=0.25 }) {
         }
       };
 
-      // TODO: Make a (deep) copy of the oldBoard
-      const copyOldBoard = [...oldBoard];
+      // Make a (deep) copy of the oldBoard
+      const copyOldBoard = oldBoard.map(row => [...row]);
 
-      // TODO: in the copy, flip this cell and the cells around it
+      // in the copy, flip this cell and the cells around it
       flipCell(y, x, copyOldBoard);
       flipCell(y-1, x, copyOldBoard);
       flipCell(y+1, x, copyOldBoard);
       flipCell(y, x-1, copyOldBoard);
       flipCell(y, x+1, copyOldBoard);
 
-
-      // TODO: return the copy
+      // return the copy
       return copyOldBoard;
     });
   }    
@@ -83,9 +82,19 @@ function Board({ nrows=3, ncols=5, chanceLightStartsOn=0.25 }) {
     )
   }
   return (
-    <div className="Board">
+    <div className="Board" data-testid="board">
       <table>
-        {board.map((row, y) => <tr>{row.map((cell, x) => <Cell isLit={cell} flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)} />)}</tr>)}
+        <tbody>
+          {board.map((row, y) => 
+            <tr key={y}>{row.map((cell, x) => 
+              <Cell 
+                dataTestid={`${y}-${x}`}
+                key={`${y}-${x}`}
+                isLit={cell} 
+                flipCellsAroundMe={() => flipCellsAround(`${y}-${x}`)} 
+              />)}
+            </tr>)}
+        </tbody>
       </table>
     </div>
   )
